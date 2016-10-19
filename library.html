@@ -1,0 +1,129 @@
+<HTML>
+<HEAD>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+</HEAD>
+<BODY>
+<div id="header">
+	<h1>Library</h1>
+	<p align="right" id="usernameDisplay"> </p>
+</div>
+
+<div id="signIn">
+	<h2>Sign In: </h2>
+		
+		<label>Username:</label>
+		<input id="loginUsername">
+		<br>
+		<label>Password:</label>
+		<input id="loginPassword">
+		<br>
+		<button id="signInSubmit">Sign In</button>
+		<br>
+		<p>Don't have an account? <button id="buttonToSignUp">Sign Up Now</button> </p> 
+		
+</div>
+
+<div id="signUp">
+	<h2>Sign Up: </h2>
+		<label>Username:</label>
+		<input id="username">
+		<br>
+		<label>Password:</label>
+		<input id="password">
+		<br>
+		<label>Confirm Password:</label>
+		<input id="confirmPassword">
+		<br>
+		<label>Email:</label>
+		<input id="email">
+		<br>
+		<label>Phone Number:</label>
+		<input id="phone">
+		<br>
+		<label>Are you a librarian?</label>
+		<input type="checkbox" value="1" id="librarianYes">
+		<input type="checkbox" value="0">
+		<br>
+		<label>First Name:</label> 
+		<input id="firstName">
+		<br>
+		<label>Last Name:</label>
+		<input id="lastName">
+		<br>
+		<button id="signUpSubmit">Submit</button>
+</div>
+
+
+
+<div id="libraryDisplay">
+	<h2>Current Books:</h2>
+</div>
+
+
+
+
+<script>
+$( document ).ready(function() {
+    $("#signUp").hide();
+	$("#libraryDisplay").hide();
+	
+	$("#buttonToSignUp").click(function () {
+		$("#signIn").hide();
+		$("#signUp").show();
+	})
+
+	$("#signUpSubmit").click(function() {
+		if (validate()) {
+			$("#signUp").hide();
+			signUp();		
+		}
+	});
+
+	function validate() {
+		//passwords equal 
+		console.log("In validate");
+		return true;
+	}
+
+	function signUp() {
+		var data = {username:$('#username').val(), password:$('#password').val(), email:$('#email').val(), 
+					phone:$('#phone').val(), librarian:$('#librarianYes').val(), firstName:$('#firstName').val(), lastName:$('#lastName').val() };
+		$.ajax({type:"POST",
+	  		url: "signUp.php", 
+			data: data,  
+			success: function(data,status) { 
+				console.log(data);
+				$("#signIn").show();
+			}
+	   }); 
+	}
+	
+	$("#signInSubmit").click(function() {
+		$.ajax({type:"POST",
+	  		url: "signIn.php", 
+			data: {username:$('#loginUsername').val(), password:$('#loginPassword').val()},  
+			success: function(data,status) { 
+				console.log(data);
+				$("#usernameDisplay").html(data);
+				$("#signIn").hide();
+				getLibrary();
+				//do i want the librarian or student view?
+			}
+	   }); 
+	});
+
+	function getStudentLibrary() {
+		$.ajax({type:"POST",
+	  		url: "displayStudentLibrary.php", 
+			data: {username:$('#username').val()},  
+			success: function(data,status) { 
+				console.log(data);
+				$("#libraryDisplay").html(data);
+				$("#libraryDisplay").show();
+			}
+	   }); 
+	}
+});
+</script>
+</BODY>
+</HTML>
