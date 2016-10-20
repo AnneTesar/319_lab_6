@@ -73,19 +73,6 @@ $( document ).ready(function() {
 	})
 
 	$("#signUpSubmit").click(function() {
-		if (validate()) {
-			$("#signUp").hide();
-			signUp();		
-		}
-	});
-
-	function validate() {
-		//passwords equal 
-		console.log("In validate");
-		return true;
-	}
-
-	function signUp() {
 		var data = {username:$('#username').val(), password:$('#password').val(), email:$('#email').val(), 
 					phone:$('#phone').val(), librarian:$('#librarianYes').val(), firstName:$('#firstName').val(), lastName:$('#lastName').val() };
 		$.ajax({type:"POST",
@@ -93,10 +80,11 @@ $( document ).ready(function() {
 			data: data,  
 			success: function(data,status) { 
 				console.log(data);
+				$("#signUp").hide();
 				$("#signIn").show();
 			}
-	   }); 
-	}
+	   }); 	
+	});
 	
 	$("#signInSubmit").click(function() {
 		$.ajax({type:"POST",
@@ -106,7 +94,7 @@ $( document ).ready(function() {
 				console.log(data);
 				$("#usernameDisplay").html(data);
 				$("#signIn").hide();
-				getLibrary();
+				getStudentLibrary();
 				//do i want the librarian or student view?
 			}
 	   }); 

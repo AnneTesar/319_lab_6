@@ -25,6 +25,7 @@ $librarian = $_REQUEST["librarian"];
 $firstName = $_REQUEST["firstName"];
 $lastName = $_REQUEST["lastName"];
 
+//do validation here?
 
 $dbservername = "mysql.cs.iastate.edu";
 $dbusername = "dbu319t36";
