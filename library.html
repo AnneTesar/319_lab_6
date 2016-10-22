@@ -56,7 +56,18 @@
 
 
 <div id="libraryDisplay">
+	<div id="studentButtons">
+		<button id="borrowBook">Borrow Book</button>
+		<button id="returnBook">Return Book</button>
+	</div>
+	<div id="librarianButtons">
+		<button id="addBook">Add Book</button>
+	</div>
+	
+	
 	<h2>Current Books:</h2>
+	<div id="booksDisplay">
+	</div>
 </div>
 
 
@@ -66,6 +77,8 @@
 $( document ).ready(function() {
     $("#signUp").hide();
 	$("#libraryDisplay").hide();
+	$("#studentButtons").hide();
+	$("#librarianButtons").hide();
 	
 	$("#buttonToSignUp").click(function () {
 		$("#signIn").hide();
@@ -94,22 +107,84 @@ $( document ).ready(function() {
 				console.log(data);
 				$("#usernameDisplay").html(data);
 				$("#signIn").hide();
-				getStudentLibrary();
+				getLibrary();
 				//do i want the librarian or student view?
 			}
 	   }); 
 	});
+	
+	$("#borrowBook").click(function() {
+		var bookId = prompt("Enter the ID of the book you want to borrow", "");
+		$.ajax({type:"POST",
+	  		url: "borrowBook.php", 
+			data: {bookId:bookId},  
+			success: function(data,status) { 
+				console.log(data);
+				getLibrary();
+				//do i want the librarian or student view?
+			}
+	   }); 
+	});
+	
+	$("#returnBook").click(function() {
+		var bookId = prompt("Enter the ID of the book you want to return", "");
+		$.ajax({type:"POST",
+	  		url: "returnBook.php", 
+			data: {bookId:bookId},  
+			success: function(data,status) { 
+				console.log(data);
+				getLibrary();
+				//do i want the librarian or student view?
+			}
+	   }); 
+	});
+	
+	$("#addBook").click(function() {
+	var bookId = prompt("Enter the ID of the new book:", "");
+	var bookTitle = prompt("Enter the title of the new book:", "");
+	var author = prompt("Enter the author of the new book:", "");
+	$.ajax({type:"POST",
+  		url: "addBook.php", 
+		data: {bookId:bookId, bookTitle:bookTitle, author:author},  
+		success: function(data,status) { 
+			console.log(data);
+			getLibrary();
+			//do i want the librarian or student view?
+		}
+	   }); 
+	});
+	
+	function getLibrary() {
+		//if user is student
+		//getStudentLibrary()
+		//else
+		getLibrarianLibrary();
+	}
 
 	function getStudentLibrary() {
 		$.ajax({type:"POST",
 	  		url: "displayStudentLibrary.php", 
-			data: {username:$('#username').val()},  
+			data: "",  
 			success: function(data,status) { 
 				console.log(data);
-				$("#libraryDisplay").html(data);
+				$("#booksDisplay").html(data);
 				$("#libraryDisplay").show();
+				$("#studentButtons").show();
 			}
 	   }); 
+	}
+	
+	function getLibrarianLibrary() {
+	$.ajax({type:"POST",
+  		url: "displayStudentLibrary.php", 
+		data: "",  
+		success: function(data,status) { 
+			console.log(data);
+			$("#booksDisplay").html(data);
+			$("#libraryDisplay").show();
+			$("#librarianButtons").show();
+		}
+   }); 
 	}
 });
 </script>

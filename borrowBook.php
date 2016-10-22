@@ -1,27 +1,9 @@
 <?php 
 
-class Library {
-	public $var;
-}
-class Shelf {
-	public $name;
-	public $num_books; //max of 20
-}
-class Book {
-	public $name;
-	public $id;
-	
-}
-class Student {
-	public $name;
-	
-}
-
-$username = $_REQUEST["username"];
-$password = $_REQUEST["password"];
-
 session_start();
-$_SESSION["username"] = $username;
+$username = $_SESSION["username"];
+ 
+$bookId = $_REQUEST["bookId"];
 
 $dbservername = "mysql.cs.iastate.edu";
 $dbusername = "dbu319t36";
@@ -36,18 +18,23 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$sql = "SELECT * FROM users WHERE userName='" . $username . "' AND password='" . $password . "';";
+$sql = "SELECT * FROM books WHERE bookId=" . $bookId . ";";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-		echo $row["userName"];
-		//make student object? 
-		//return that??
+		if ($row["availability"] == 0) {
+			echo "avaiability == 0";
+		}
+		else if ($row["availability"] == 1) {
+			echo "updating table";
+			$update = "UPDATE books SET availability=0 WHERE bookId=" . $bookId . ";";
+			$result2 = $conn->query($update);
+			
+			//update loanHIstory
+		}
     }
-} else {
-    echo "0 results";
 }
 $conn->close();
 
