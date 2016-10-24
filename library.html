@@ -42,7 +42,6 @@
 		<br>
 		<label>Are you a librarian?</label>
 		<input type="checkbox" value="1" id="librarianYes">
-		<input type="checkbox" value="0">
 		<br>
 		<label>First Name:</label> 
 		<input id="firstName">
@@ -62,6 +61,8 @@
 	</div>
 	<div id="librarianButtons">
 		<button id="addBook">Add Book</button>
+		<button id="deleteBook">Delete Book</button>
+		<button id="viewBorrowHistory">View Borrow History</button>
 	</div>
 	
 	
@@ -121,7 +122,6 @@ $( document ).ready(function() {
 			success: function(data,status) { 
 				console.log(data);
 				getLibrary();
-				//do i want the librarian or student view?
 			}
 	   }); 
 	});
@@ -134,31 +134,58 @@ $( document ).ready(function() {
 			success: function(data,status) { 
 				console.log(data);
 				getLibrary();
-				//do i want the librarian or student view?
 			}
 	   }); 
 	});
 	
 	$("#addBook").click(function() {
-	var bookId = prompt("Enter the ID of the new book:", "");
-	var bookTitle = prompt("Enter the title of the new book:", "");
-	var author = prompt("Enter the author of the new book:", "");
-	$.ajax({type:"POST",
-  		url: "addBook.php", 
-		data: {bookId:bookId, bookTitle:bookTitle, author:author},  
-		success: function(data,status) { 
-			console.log(data);
-			getLibrary();
-			//do i want the librarian or student view?
-		}
-	   }); 
+		var bookId = prompt("Enter the ID of the new book:", "");
+		var bookTitle = prompt("Enter the title of the new book:", "");
+		var author = prompt("Enter the author of the new book:", "");
+		$.ajax({type:"POST",
+	  		url: "addBook.php", 
+			data: {bookId:bookId, bookTitle:bookTitle, author:author},  
+			success: function(data,status) { 
+				console.log(data);
+				getLibrary();
+			}
+		}); 
+	});
+	
+	$("#deleteBook").click(function() {
+		var bookId = prompt("Enter the ID of the book to delete:", "");
+		$.ajax({type:"POST",
+	  		url: "deleteBook.php", 
+			data: {bookId:bookId},  
+			success: function(data,status) { 
+				console.log(data);
+				getLibrary();
+			}
+		}); 
+	});
+	
+	$("#viewBorrowHistory").click(function() {
+		var studentId = prompt("Enter the username of the student:", "");
+		$.ajax({type:"POST",
+	  		url: "viewBorrowHistory.php", 
+			data: {studentId:studentId},  
+			success: function(data,status) { 
+				console.log(data);
+				alert(data);
+				getLibrary();
+			}
+		}); 
 	});
 	
 	function getLibrary() {
 		//if user is student
-		//getStudentLibrary()
+		//getStudentLibrary();
 		//else
 		getLibrarianLibrary();
+		
+		/*
+		We could probably do the same library and just show/hide different buttons. Leaving this for now.
+		*/
 	}
 
 	function getStudentLibrary() {

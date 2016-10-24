@@ -24,8 +24,10 @@ $sql = "INSERT INTO books VALUES (" . $bookId . ", '" . $bookTitle . "', '" . $a
 $result = $conn->query($sql);
 
 //also need to add to book locations!!
+//how do i know which shelf to put it on?
+//check that shelf has no more than 20 books, handle. 
 
-if ($conn->query($sql) === TRUE) {
+if ($result === TRUE) {
     echo "New record created successfully";
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;

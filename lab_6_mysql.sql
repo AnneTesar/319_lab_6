@@ -18,11 +18,13 @@ INSERT INTO shelves VALUES ('1', 'Science');
 INSERT INTO bookLocations VALUES ('1', '1');
 INSERT INTO bookLocations VALUES ('1', '2');
 INSERT INTO bookLocations VALUES ('1', '3');
-
+INSERT INTO bookLocations VALUES ('1', '5');
 
 SELECT * FROM books;
+SELECT * FROM bookLocations;
 SELECT * FROM shelves;
 SELECT * FROM users;
+SELECT * FROM loanHistory;
 
 SELECT * FROM users WHERE userName='admin' AND password='admin';
 

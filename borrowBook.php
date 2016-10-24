@@ -32,7 +32,8 @@ if ($result->num_rows > 0) {
 			$update = "UPDATE books SET availability=0 WHERE bookId=" . $bookId . ";";
 			$result2 = $conn->query($update);
 			
-			//update loanHIstory
+			$insert = "INSERT INTO loanHistory VALUES ('" . $username . "', " . $bookId . ", now(), null);";
+			$result2 = $conn->query($insert);
 		}
     }
 }

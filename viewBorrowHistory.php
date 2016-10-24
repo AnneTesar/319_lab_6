@@ -3,7 +3,7 @@
 session_start();
 $username = $_SESSION["username"];
  
-$bookId = $_REQUEST["bookId"];
+$studentId = $_REQUEST["studentId"];
 
 $dbservername = "mysql.cs.iastate.edu";
 $dbusername = "dbu319t36";
@@ -18,26 +18,24 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$sql = "SELECT * FROM books WHERE bookId=" . $bookId . ";";
-$result = $conn->query($sql);
+$sql = "SELECT * FROM loanHistory WHERE userName='" . $studentId . "';";
+$result = $conn->query($sql); 
+
+$output = "";
 
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-		if ($row["availability"] == 0) {
-			$update = "UPDATE books SET availability=1 WHERE bookId=" . $bookId . ";";
-			$result2 = $conn->query($update);
-			
-			$update = "UPDATE loanHistory SET returnedDate=now() WHERE bookId=" . $bookId . " AND userName='" . $username . "';";
-			$result2 = $conn->query($update);
+		$output .= $row['userName'] . " borrowed " . $row["bookId"] . " on " . $row["dueDate"];
+		if ($row["returnedDate"]) {
+			$output .= " and returned it " . $row["returnedDate"];
 		}
-		else if ($row["availability"] == 1) {
-			echo "book already there";
-		}
+		$output .= ". \n";
     }
 }
 $conn->close();
 
+echo $output;
 /*
 
 
