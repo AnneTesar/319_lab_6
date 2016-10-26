@@ -41,7 +41,7 @@
 		<input id="phone">
 		<br>
 		<label>Are you a librarian?</label>
-		<input type="checkbox" value="1" id="librarianYes">
+		<input type="checkbox" id="librarianYes" checked="checked">
 		<br>
 		<label>First Name:</label> 
 		<input id="firstName">
@@ -76,6 +76,7 @@
 
 <script>
 $( document ).ready(function() {
+	var studentOrLibrarian = 0;
     $("#signUp").hide();
 	$("#libraryDisplay").hide();
 	$("#studentButtons").hide();
@@ -85,31 +86,41 @@ $( document ).ready(function() {
 		$("#signIn").hide();
 		$("#signUp").show();
 	})
+	
+	$('#librarianYes').on('change', function(){
+   		$('#librarianYes').val(this.checked ? 1 : 0);
+	});
 
 	$("#signUpSubmit").click(function() {
-		var data = {username:$('#username').val(), password:$('#password').val(), email:$('#email').val(), 
+		console.log($('#librarianYes').val());
+		if ($('#password').val() != $('#confirmPassword').val()) {
+			alert("Passwords do not match");
+		}
+		else {
+			var data = {username:$('#username').val(), password:$('#password').val(), email:$('#email').val(), 
 					phone:$('#phone').val(), librarian:$('#librarianYes').val(), firstName:$('#firstName').val(), lastName:$('#lastName').val() };
-		$.ajax({type:"POST",
-	  		url: "signUp.php", 
-			data: data,  
-			success: function(data,status) { 
-				console.log(data);
-				$("#signUp").hide();
-				$("#signIn").show();
-			}
-	   }); 	
+			$.ajax({type:"POST",
+		  		url: "signUp.php", 
+				data: data,  
+				success: function(data,status) { 
+					$("#signUp").hide();
+					$("#signIn").show();
+				}
+		   }); 	
+		}
+		
 	});
 	
 	$("#signInSubmit").click(function() {
 		$.ajax({type:"POST",
-	  		url: "signIn.php", 
+	  		url: "signIn.php",
 			data: {username:$('#loginUsername').val(), password:$('#loginPassword').val()},  
-			success: function(data,status) { 
-				console.log(data);
-				$("#usernameDisplay").html(data);
+			success: function(Result) { 
+				var myObj = $.parseJSON(Result);
+				$("#usernameDisplay").html(myObj.username);
 				$("#signIn").hide();
+				studentOrLibrarian = myObj.librarian;
 				getLibrary();
-				//do i want the librarian or student view?
 			}
 	   }); 
 	});
@@ -142,9 +153,10 @@ $( document ).ready(function() {
 		var bookId = prompt("Enter the ID of the new book:", "");
 		var bookTitle = prompt("Enter the title of the new book:", "");
 		var author = prompt("Enter the author of the new book:", "");
+		var shelfNum = prompt("Enter the ID of the shelf you want to place the new book on:", "");
 		$.ajax({type:"POST",
 	  		url: "addBook.php", 
-			data: {bookId:bookId, bookTitle:bookTitle, author:author},  
+			data: {bookId:bookId, bookTitle:bookTitle, author:author, shelfNum:shelfNum},  
 			success: function(data,status) { 
 				console.log(data);
 				getLibrary();
@@ -178,14 +190,13 @@ $( document ).ready(function() {
 	});
 	
 	function getLibrary() {
-		//if user is student
-		//getStudentLibrary();
-		//else
-		getLibrarianLibrary();
 		
-		/*
-		We could probably do the same library and just show/hide different buttons. Leaving this for now.
-		*/
+		if (studentOrLibrarian == 1) {
+			getLibrarianLibrary();
+		}
+		else {
+			getStudentLibrary();
+		}
 	}
 
 	function getStudentLibrary() {

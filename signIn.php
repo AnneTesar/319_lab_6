@@ -1,22 +1,5 @@
 <?php 
 
-class Library {
-	public $var;
-}
-class Shelf {
-	public $name;
-	public $num_books; //max of 20
-}
-class Book {
-	public $name;
-	public $id;
-	
-}
-class Student {
-	public $name;
-	
-}
-
 $username = $_REQUEST["username"];
 $password = $_REQUEST["password"];
 
@@ -42,9 +25,8 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-		echo $row["userName"];
-		//make student object? 
-		//return that??
+		$user = "{\"username\":\"" . $row["userName"] . "\",\"librarian\":\"" . $row["librarian"] . "\"}";
+		echo $user;
     }
 } else {
     echo "0 results";

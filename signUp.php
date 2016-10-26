@@ -1,21 +1,4 @@
-<?php 
-
-class Library {
-	public $var;
-}
-class Shelf {
-	public $name;
-	public $num_books; //max of 20
-}
-class Book {
-	public $name;
-	public $id;
-	
-}
-class Student {
-	public $name;
-	
-}
+<?php
 
 $username = $_REQUEST["username"];
 $password = $_REQUEST["password"];
@@ -25,7 +8,15 @@ $librarian = $_REQUEST["librarian"];
 $firstName = $_REQUEST["firstName"];
 $lastName = $_REQUEST["lastName"];
 
-//do validation here?
+//TODO validation
+//$username is only alphabeticial & numerical
+//$passowrd store in db in md-5
+//already checked that passwords match
+//$email must be alphanumeric, in xxx@xxx.xxx
+//$phone should be xxxxxxxxxx
+//$librarian should be 1 or 0
+//$firstName should be only alphabetical
+//$lastName should be only alphabetical
 
 $dbservername = "mysql.cs.iastate.edu";
 $dbusername = "dbu319t36";
@@ -50,9 +41,5 @@ if ($conn->query($sql) === TRUE) {
 
 $conn->close();
 
-/*
-
-
-*/
 ?>
 

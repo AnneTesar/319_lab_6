@@ -10,6 +10,14 @@ class Library {
 	public function addShelf($shelf) {
 		array_push($this->shelves, $shelf);
 	}
+	
+	public function printLibrary() {
+		$libraryHtml = "";
+		foreach($this->shelves as $shelf) {
+			$libraryHtml .= $shelf->printShelf();
+		}
+		return $libraryHtml;
+	}
 }
 class Shelf {
 	public $shelfId;
@@ -26,9 +34,12 @@ class Shelf {
 	}
 	
 	public function printShelf() {
-		//print the shelf name
+		$shelfHtml = "<h4>" . $this->shelfName . "</h4>";
 		
-		//print all the books
+		foreach ($this->books as $book) {
+			$shelfHtml .= $book->printBook();
+		}
+		return $shelfHtml;
 	}
 	
 }
@@ -55,7 +66,7 @@ class Book {
 		}
 		$bookHtml .= "onclick=\"alert(' " . $this->bookTitle . " written by " . $this->author . ".')\">" . $this->bookId; 
 		$bookHtml .= "</button></div>";
-		echo $bookHtml;
+		return $bookHtml;
 	}
 	
 }
@@ -85,7 +96,6 @@ $sql = "SELECT * FROM shelves;";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    // output data of each row
     while($row = $result->fetch_assoc()) {
 		$thisShelf = new Shelf($row["shelfId"], $row["shelfName"]);
 		$library->addShelf($thisShelf);
@@ -96,25 +106,20 @@ $sql = "SELECT * FROM books, shelves, bookLocations WHERE books.bookId=bookLocat
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    // output data of each row
     while($row = $result->fetch_assoc()) {
 		$thisBook = new Book($row["bookId"], $row["bookTitle"], $row["author"], $row["availability"]);
-		/*
-		for ($library->shelves as $shelf) {
+		//echo $library->shelves[0]->shelfName;
+		
+		foreach ($library->shelves as $shelf) {
 			if ($shelf->shelfId == $row["shelfId"]) {
-				$shelf.addBook($thisBook);
+				$shelf->addBook($thisBook);
 			}
 		}
-		*/
-		$thisBook->printBook();
     }
 }
 
 $conn->close();
 
-/*
-
-
-*/
+echo $library->printLibrary();
 ?>
 

@@ -13,7 +13,10 @@ INSERT INTO books VALUES ('1', 'Book1', 'author1', '1');
 INSERT INTO books VALUES ('2', 'Book2', 'author2', '1');
 INSERT INTO books VALUES ('3', 'Book3', 'author3', '1');
 
-INSERT INTO shelves VALUES ('1', 'Science');
+INSERT INTO shelves VALUES ('1', 'Art');
+INSERT INTO shelves VALUES ('2', 'Science');
+INSERT INTO shelves VALUES ('3', 'Sport');
+INSERT INTO shelves VALUES ('4', 'Literature');
 
 INSERT INTO bookLocations VALUES ('1', '1');
 INSERT INTO bookLocations VALUES ('1', '2');
@@ -30,5 +33,8 @@ SELECT * FROM users WHERE userName='admin' AND password='admin';
 
 SELECT * FROM books, shelves, bookLocations WHERE books.bookId=bookLocations.bookId AND shelves.shelfID=bookLocations.shelfId;
 
+SELECT COUNT(*) FROM bookLocations WHERE shelfID=0;
+
 SET SQL_SAFE_UPDATES = 0;
 DELETE FROM books WHERE bookId=4;
+DELETE FROM shelves;
