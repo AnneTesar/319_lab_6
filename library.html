@@ -103,6 +103,7 @@ $( document ).ready(function() {
 		  		url: "signUp.php", 
 				data: data,  
 				success: function(data,status) { 
+					console.log(data);
 					$("#signUp").hide();
 					$("#signIn").show();
 				}
